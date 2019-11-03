@@ -5,15 +5,13 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.util.List;
-import java.util.Vector;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.LineBorder;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 import br.com.tarefas.data.tarefa.TarefaBean;
@@ -21,6 +19,8 @@ import br.com.tarefas.data.tarefa.TarefaDAO;
 import br.com.tarefas.gui.frame.FrameCadTarefa;
 import br.com.tarefas.gui.frame.FramePrincipal;
 import br.com.tarefas.gui.panel.painelConsole.PainelConsole;
+import br.com.tarefas.gui.panel.painelTarefas.table.EnumTarefasColunas;
+import br.com.tarefas.gui.panel.painelTarefas.table.TableModelTarefas;
 import br.com.tarefas.lib.windows.CMDUtils;
 
 public class PainelTarefas extends JPanel {
@@ -36,7 +36,7 @@ public class PainelTarefas extends JPanel {
 	private JPanel painelSouth;
 
 	private JTable tabela;
-	private DefaultTableModel model;
+	private TableModelTarefas model;
 
 	public PainelTarefas(FramePrincipal frame, PainelConsole painelConsole ) {
 		this.frame = frame;
@@ -63,54 +63,29 @@ public class PainelTarefas extends JPanel {
 		this.tabela.setAlignmentX(0);
 		this.tabela.setAlignmentY(0);
 
-		this.model = new DefaultTableModel() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				return column == Colunas.SELECT.getPosicao();
-			}
-
-			@Override
-			public Class<?> getColumnClass(int columnIndex) {
-//				if(columnIndex == Colunas.SELECT.getPosicao() ) {
-//					return Boolean.class;
-//				}
-
-				return super.getColumnClass(columnIndex);
-			}
-		};
-
-		this.model.addColumn(Colunas.SELECT.getNome());
-		this.model.addColumn(Colunas.ID.getNome());
-		this.model.addColumn(Colunas.DESCRICAO.getNome());
-		this.model.addColumn(Colunas.PATH.getNome());
-		this.model.addColumn(Colunas.PARAMETROS.getNome());
+		model = new TableModelTarefas(new TarefaDAO().getTarefas());
 
 		this.tabela.setModel(this.model);
-		this.tabela.getTableHeader().revalidate();
 
-		this.painelCenter.getViewport().add(this.tabela);
-
-		TableColumn colunaSelect = this.tabela.getColumn(Colunas.SELECT.getNome());
+		TableColumn colunaSelect = this.tabela.getColumn(EnumTarefasColunas.SELECT.getNome());
 		colunaSelect.setMaxWidth(5);
 		colunaSelect.setResizable(false);
 
-		TableColumn colunaId = this.tabela.getColumn(Colunas.ID.getNome());
+		TableColumn colunaId = this.tabela.getColumn(EnumTarefasColunas.ID.getNome());
 		colunaId.setMaxWidth(70);
 		colunaId.setResizable(false);
 
 
-		TableColumn colunaDescricao = this.tabela.getColumn(Colunas.DESCRICAO.getNome());
+		TableColumn colunaDescricao = this.tabela.getColumn(EnumTarefasColunas.DESCRICAO.getNome());
 		colunaDescricao.setPreferredWidth(150);
 
-		TableColumn colunaPath = this.tabela.getColumn(Colunas.PATH.getNome());
+		TableColumn colunaPath = this.tabela.getColumn(EnumTarefasColunas.PATH.getNome());
 		colunaPath.setPreferredWidth(300);
 
-		TableColumn colunaParametros = this.tabela.getColumn(Colunas.PARAMETROS.getNome());
+		TableColumn colunaParametros = this.tabela.getColumn(EnumTarefasColunas.PARAMETROS.getNome());
 		colunaParametros.setPreferredWidth(200);
 
-		carregaTabela();
+		this.painelCenter.getViewport().add(this.tabela);
 	}
 
 
@@ -127,7 +102,7 @@ public class PainelTarefas extends JPanel {
 		this.add(painelSouth, BorderLayout.SOUTH);
 
 		acaoBotaoNovaTarefa();
-		acaoBotaoEditarTarefa();
+		acaoBotaoEditar();
 		acaoBotaoExecutar();
 		acaoBotaoPararTodos();
 	}
@@ -141,10 +116,9 @@ public class PainelTarefas extends JPanel {
 				try {
 					FrameCadTarefa frameCadTarefa = new FrameCadTarefa();
 					frameCadTarefa.addWindowListener(new java.awt.event.WindowAdapter() {
-					    @Override
-					    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-					    	carregaTabela();
-					    }
+					    public void windowClosed(java.awt.event.WindowEvent e) {
+					    	model.update(new TarefaDAO().getTarefas());
+				    	};
 					});
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -155,12 +129,42 @@ public class PainelTarefas extends JPanel {
 		painelSouth.add(botaoNovaTarefa);
 	}
 
-	private void acaoBotaoEditarTarefa() {
+	private void acaoBotaoEditar() {
 		JButton botaoEditarTarefa = new JButton("Editar tarefa");
 
 		botaoEditarTarefa.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				TarefaBean tarefa = null;
+
+				for(int i = 0; i < tabela.getRowCount(); i++  ) {
+					TarefaBean t = model.getTarefa(i);
+
+					if(t != null && t.isSelected()) {
+						if(tarefa != null) {
+							JOptionPane.showMessageDialog(null, "Somente uma tarefa deverá estar selecionada!", "Alerta", JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+
+						tarefa = t;
+					}
+				}
+
+				if(tarefa == null) {
+					JOptionPane.showMessageDialog(null, "Nenhuma tarefa selecionada!", "Alerta", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+				try {
+					FrameCadTarefa frameCadTarefa = new FrameCadTarefa(tarefa);
+					frameCadTarefa.addWindowListener(new java.awt.event.WindowAdapter() {
+					    public void windowClosed(java.awt.event.WindowEvent e) {
+					    	model.update(new TarefaDAO().getTarefas());
+				    	};
+					});
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 
@@ -173,19 +177,25 @@ public class PainelTarefas extends JPanel {
 		botaoExecutar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				boolean hasTarefa = false;
+
 				try {
 					for(int i = 0; i < tabela.getRowCount(); i++  ) {
+						TarefaBean tarefa = model.getTarefa(i);
 
-						String path = (String) tabela.getValueAt(i, Colunas.PATH.getPosicao());
-						String parametros = (String) tabela.getValueAt(i, Colunas.PARAMETROS.getPosicao());
+						if(tarefa == null || !tarefa.isSelected()) {
+							continue;
+						}
 
 						String cmd = "";
 
-						if(path.toUpperCase().contains(".JAR") || path.toUpperCase().contains(".WAR")) {
-							cmd = "java -jar" + parametros;
+						if(tarefa.getPath().toUpperCase().contains(".JAR") || tarefa.getPath().toUpperCase().contains(".WAR")) {
+							cmd = "java -jar" + tarefa.getParametros();
 						}
 
-						new CMDUtils().executaCmd(cmd, path, painelConsole.criaNovoPainelLogavel(CMDUtils.getNewProcessName(path)));
+						new CMDUtils().executaCmd(cmd, tarefa.getPath(), painelConsole.criaNovoPainelLogavel(CMDUtils.getNewProcessName(tarefa.getPath())));
+
+						hasTarefa = true;
 					}
 				}catch (Exception ex) {
 					ex.printStackTrace();
@@ -193,6 +203,17 @@ public class PainelTarefas extends JPanel {
 
 				if(CMDUtils.mapProcessos.size() > 0) {
 					frame.getAbas().setEnabledAt(painelConsole.getTabIndex(), true);
+				}
+				else {
+					try {
+						CMDUtils.pararTodosProcessos();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
+
+				if(!hasTarefa) {
+					JOptionPane.showMessageDialog(null, "Nenhuma tarefa selecionada!", "Alerta", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -219,57 +240,11 @@ public class PainelTarefas extends JPanel {
 		painelSouth.add(botaoPararTodos);
 	}
 
-	private void carregaTabela() {
-		for( int i = 0; i < this.model.getRowCount(); i++) {
-			this.model.removeRow(i);
-		}
-
-		this.model.setRowCount(0);
-
-		List<TarefaBean> tarefas = new TarefaDAO().getTarefas();
-
-		for(TarefaBean tarefa : tarefas) {
-			Vector<String> vec = new Vector<>();
-
-			vec.add("");
-			vec.add(Integer.toString(tarefa.getId()));
-			vec.add(tarefa.getDescricao());
-			vec.add(tarefa.getPath());
-			vec.add(tarefa.getParametros());
-
-			this.model.addRow(vec);
-		}
-	}
-
 	public int getTabIndex() {
 		return tabIndex;
 	}
 
 	public void setTabIndex(int tabIndex) {
 		this.tabIndex = tabIndex;
-	}
-
-	private enum Colunas {
-		SELECT("", 0),
-		ID("Id", 1),
-		DESCRICAO("Descrição", 2),
-		PATH("Arquivo", 3),
-		PARAMETROS("Parametros", 4);
-
-		private final String nome;
-		private final int posicao;
-
-		Colunas(String nome, int posicao) {
-			this.nome = nome;
-			this.posicao = posicao;
-		}
-
-		public String getNome() {
-			return this.nome;
-		}
-
-		public int getPosicao() {
-			return this.posicao;
-		}
 	}
 }

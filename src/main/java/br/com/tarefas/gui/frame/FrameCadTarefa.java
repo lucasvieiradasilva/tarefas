@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
@@ -173,15 +174,29 @@ public class FrameCadTarefa extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
+
+					if(StringUtils.trim(txtDescricao.getText()).isEmpty()) {
+						JOptionPane.showMessageDialog(null, "A tarefa deverá conter uma descrição!", "Alerta", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+
+					if(StringUtils.trim(txtPath.getText()).isEmpty()) {
+						JOptionPane.showMessageDialog(null, "A tarefa deverá conter um arquivo!", "Alerta", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+
 					TarefaBean tarefaSalvar = new TarefaBean();
 					tarefaSalvar.setId(tarefa.getId());
 					tarefaSalvar.setDescricao(StringUtils.trim(txtDescricao.getText()));
 					tarefaSalvar.setParametros(StringUtils.trim(txtParametros.getText()));
 					tarefaSalvar.setPath(StringUtils.trim(txtPath.getText()));
+					tarefaSalvar.setSelected(false);
 
 					new TarefaDAO().salvar(tarefaSalvar);
-					fechar();
+					dispose();
 				} catch (Exception e1) {
+					e1.printStackTrace();
+				} catch (Throwable e1) {
 					e1.printStackTrace();
 				}
 			}
@@ -197,7 +212,8 @@ public class FrameCadTarefa extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					new FrameCadTarefa();
+					new TarefaDAO().remover(tarefa.getId());
+					dispose();
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -205,10 +221,6 @@ public class FrameCadTarefa extends JFrame {
 		});
 
 		painelSouth.add(botaoExcluir);
-	}
-
-	private void fechar() {
-		this.dispose();
 	}
 
 	private void mostraJanela() throws Exception {

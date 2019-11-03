@@ -2,6 +2,7 @@ package br.com.tarefas.data.tarefa;
 
 public class TarefaBean {
 	private int id;
+	private boolean selected;
 	private String descricao;
 	private String path;
 	private String parametros;
@@ -12,6 +13,14 @@ public class TarefaBean {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
 	}
 
 	public String getDescricao() {
