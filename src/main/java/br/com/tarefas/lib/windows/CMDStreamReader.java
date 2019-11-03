@@ -25,7 +25,7 @@ public class CMDStreamReader implements Runnable {
             }
             reader.close();
         } catch (IOException e) {
-        	painel.loga(e.getStackTrace().toString());
+        	CMDUtils.mapProcessos.remove(painel.getProcessName());
             e.printStackTrace();
         }
     }
@@ -33,5 +33,6 @@ public class CMDStreamReader implements Runnable {
     public void parar() throws IOException {
     	process.destroy();
     	reader.close();
+    	this.painel.destroy();
     }
 }

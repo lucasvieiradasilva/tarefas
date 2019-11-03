@@ -38,7 +38,14 @@ public class PainelConsole extends JPanel {
 	}
 
 	public PainelLogavel criaNovoPainelLogavel(String processName) {
-		PainelLog painelLog = new PainelLog(processName);
+		PainelLog painelLog = new PainelLog(processName) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void destroy() {
+				removePainel(this);
+			}
+		};
 
 		abas.addTab(processName, painelLog);
 
@@ -71,6 +78,13 @@ public class PainelConsole extends JPanel {
 	public void removeTodos() {
 		this.abas.removeAll();
 		this.tabsCount = 0;
+		this.mapPaineis.clear();
 		this.frame.getAbas().setTitleAt(getTabIndex(), "Console");
+	}
+
+	public void removePainel(PainelLog painelLog) {
+		this.abas.remove(painelLog);
+		tabsCount--;
+		setPainelConsoleQtdeTabs();
 	}
 }

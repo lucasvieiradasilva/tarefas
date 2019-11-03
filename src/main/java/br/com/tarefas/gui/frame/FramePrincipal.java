@@ -42,7 +42,7 @@ public class FramePrincipal extends JFrame{
 		    @Override
 		    public void windowClosing(java.awt.event.WindowEvent e) {
 		        try {
-					CMDUtils.pararTodosProcessos();
+					CMDUtils.pararTodosProcessos(painelConsole);
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}

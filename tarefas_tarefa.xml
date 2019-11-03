@@ -13,4 +13,11 @@
     <path>C:\Users\lucas\Desktop\exec\prg1\teste2.jar</path>
     <parametros></parametros>
   </br.com.tarefas.data.tarefa.TarefaBean>
+  <br.com.tarefas.data.tarefa.TarefaBean>
+    <id>3</id>
+    <selected>false</selected>
+    <descricao>teste</descricao>
+    <path>teste</path>
+    <parametros></parametros>
+  </br.com.tarefas.data.tarefa.TarefaBean>
 </list>

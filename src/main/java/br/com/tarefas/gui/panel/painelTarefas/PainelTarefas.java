@@ -187,6 +187,8 @@ public class PainelTarefas extends JPanel {
 							continue;
 						}
 
+						hasTarefa = true;
+
 						String cmd = "";
 
 						if(tarefa.getPath().toUpperCase().contains(".JAR") || tarefa.getPath().toUpperCase().contains(".WAR")) {
@@ -195,9 +197,10 @@ public class PainelTarefas extends JPanel {
 
 						new CMDUtils().executaCmd(cmd, tarefa.getPath(), painelConsole.criaNovoPainelLogavel(CMDUtils.getNewProcessName(tarefa.getPath())));
 
-						hasTarefa = true;
+
 					}
 				}catch (Exception ex) {
+					JOptionPane.showMessageDialog(null, "Ocorreu um erro ao executar a(s) tarefa(s)!", "Alerta", JOptionPane.ERROR_MESSAGE);
 					ex.printStackTrace();
 				}
 
@@ -206,7 +209,7 @@ public class PainelTarefas extends JPanel {
 				}
 				else {
 					try {
-						CMDUtils.pararTodosProcessos();
+						CMDUtils.pararTodosProcessos(painelConsole);
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
@@ -228,7 +231,7 @@ public class PainelTarefas extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					CMDUtils.pararTodosProcessos();
+					CMDUtils.pararTodosProcessos(painelConsole);
 					painelConsole.removeTodos();
 					frame.getAbas().setEnabledAt(painelConsole.getTabIndex(), false);
 				} catch (IOException e1) {

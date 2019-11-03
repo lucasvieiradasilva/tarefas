@@ -56,4 +56,8 @@ public class PainelLog extends JScrollPane implements PainelLogavel {
 	public String getProcessName() {
 		return this.processName;
 	}
+
+	@Override
+	public void destroy() {
+	}
 }

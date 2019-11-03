@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
+import br.com.tarefas.gui.panel.painelConsole.PainelConsole;
 import br.com.tarefas.lib.StringUtils;
 
 public class CMDUtils {
@@ -85,14 +86,17 @@ public class CMDUtils {
 		mapProcessos.put(painel.getProcessName(), new BeanProcessoLog(painel.getProcessName(), reader, thread));
 	}
 
-	public static void pararTodosProcessos() throws IOException {
+	public static void pararTodosProcessos(PainelConsole painel) throws IOException {
 		for(BeanProcessoLog bean : mapProcessos.values()) {
 			parar(bean);
 		}
+		mapProcessos.clear();
+		painel.removeTodos();
 	}
 
 	public static void pararProcesso(String nomeProcesso) throws IOException {
 		parar(mapProcessos.get(nomeProcesso));
+		mapProcessos.remove(nomeProcesso);
 	}
 
 	private static void parar(BeanProcessoLog bean) throws IOException {
