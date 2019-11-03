@@ -1,0 +1,20 @@
+<list>
+  <br.com.tarefas.data.tarefa.TarefaBean>
+    <id>1</id>
+    <descricao>teste</descricao>
+    <path>C:\Users\lucas\Desktop\exec\prg1\teste.jar</path>
+    <parametros></parametros>
+  </br.com.tarefas.data.tarefa.TarefaBean>
+  <br.com.tarefas.data.tarefa.TarefaBean>
+    <id>2</id>
+    <descricao>tarefa</descricao>
+    <path>C:\Users\lucas\Desktop\exec\prg1\teste2.jar</path>
+    <parametros></parametros>
+  </br.com.tarefas.data.tarefa.TarefaBean>
+  <br.com.tarefas.data.tarefa.TarefaBean>
+    <id>4</id>
+    <descricao>Tarefa test</descricao>
+    <path>C:\Users\lucas\Desktop\exec\prg1\teste.jar</path>
+    <parametros></parametros>
+  </br.com.tarefas.data.tarefa.TarefaBean>
+</list>
