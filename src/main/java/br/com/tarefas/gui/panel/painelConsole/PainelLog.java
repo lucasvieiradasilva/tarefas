@@ -21,6 +21,15 @@ public class PainelLog extends JScrollPane implements PainelLogavel {
 	private JPanel contentPane = new JPanel();
 	private JTextArea txtLog = new JTextArea();
 
+	private AdjustmentListener adjustmentListener = new AdjustmentListener() {
+
+      @Override
+      public void adjustmentValueChanged(AdjustmentEvent e) {
+         e.getAdjustable().setValue(e.getAdjustable().getMaximum());
+      }
+
+	};
+
 	public PainelLog(String processName) {
 		this.processName = processName;
 
@@ -35,6 +44,8 @@ public class PainelLog extends JScrollPane implements PainelLogavel {
 
 		this.getViewport().add(this.contentPane);
 
+		lockScroll();
+
 		this.txtLog.addKeyListener( new KeyListener(){
 
          @Override
@@ -42,9 +53,18 @@ public class PainelLog extends JScrollPane implements PainelLogavel {
             if(StringUtils.equals( String.valueOf( e.getKeyChar() ), "1" )) { // 1
                if(travaScroll) {
                   travaScroll = false;
+                  unlockScroll();
+                  txtLog.append( "CONSOLE DESTRAVADO!" + "\n" );
                }else {
                   travaScroll = true;
+                  lockScroll();
+                  txtLog.append("CONSOLE TRAVADO!" + "\n");
                }
+               return;
+            }
+
+            if(StringUtils.equals( String.valueOf( e.getKeyChar() ), "2" )) { // 2
+               txtLog.setText("CONSOLE LIMPO!\n");
             }
          }
 
@@ -61,21 +81,16 @@ public class PainelLog extends JScrollPane implements PainelLogavel {
 	@Override
 	public void loga(String log) {
 	   this.txtLog.append( log + "\n" );
-
-		if(this.travaScroll) {
-		   scrollToDown();
-		}
-
 		this.contentPane.revalidate();
 	}
 
-	private void scrollToDown() {
-		this.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
-	        public void adjustmentValueChanged(AdjustmentEvent e) {
-	            e.getAdjustable().setValue(e.getAdjustable().getMaximum());
-	        }
-	    });
+	private void lockScroll() {
+		this.getVerticalScrollBar().addAdjustmentListener(adjustmentListener);
 	}
+
+	private void unlockScroll() {
+      this.getVerticalScrollBar().removeAdjustmentListener(adjustmentListener);
+   }
 
 	@Override
 	public String getProcessName() {
