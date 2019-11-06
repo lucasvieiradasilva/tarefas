@@ -1,9 +1,0 @@
-<list>
-  <br.com.tarefas.data.tarefa.TarefaBean>
-    <id>1</id>
-    <selected>false</selected>
-    <descricao>GIX-CAMADA</descricao>
-    <path>C:\Users\lucas.silva.SHXINFOR\Desktop\gix-servico-camada.war</path>
-    <parametros>&quot;C:\Eclipse\deploy\CONFIGURACAO\config_gix-servico-camada.shx&quot;</parametros>
-  </br.com.tarefas.data.tarefa.TarefaBean>
-</list>
