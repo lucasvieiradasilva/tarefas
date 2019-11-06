@@ -1,4 +1,4 @@
-package br.com.tarefas.gui.frame;
+package br.com.tarefas.gui.frame.cadTarefa;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

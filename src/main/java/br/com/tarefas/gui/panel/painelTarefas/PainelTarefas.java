@@ -16,8 +16,8 @@ import javax.swing.table.TableColumn;
 
 import br.com.tarefas.data.tarefa.TarefaBean;
 import br.com.tarefas.data.tarefa.TarefaDAO;
-import br.com.tarefas.gui.frame.FrameCadTarefa;
 import br.com.tarefas.gui.frame.FramePrincipal;
+import br.com.tarefas.gui.frame.cadTarefa.FrameCadTarefa;
 import br.com.tarefas.gui.panel.painelConsole.PainelConsole;
 import br.com.tarefas.gui.panel.painelTarefas.table.EnumTarefasColunas;
 import br.com.tarefas.gui.panel.painelTarefas.table.TableModelTarefas;

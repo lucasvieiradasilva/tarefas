@@ -6,7 +6,7 @@ import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-
+import br.com.tarefas.gui.panel.painelArquivos.PainelArquivos;
 import br.com.tarefas.gui.panel.painelConsole.PainelConsole;
 import br.com.tarefas.gui.panel.painelTarefas.PainelTarefas;
 import br.com.tarefas.gui.utils.FrameUtils;
@@ -24,6 +24,7 @@ public class FramePrincipal extends JFrame{
 	private JTabbedPane abas;
 
 	private PainelConsole painelConsole = new PainelConsole(this);
+	private PainelArquivos painelVariaveis = new PainelArquivos( this );
 	private PainelTarefas painelTarefas = new PainelTarefas(this, painelConsole);
 
 	public void montaTela() throws Exception {
@@ -61,14 +62,14 @@ public class FramePrincipal extends JFrame{
 	private void preparaAbas() {
 		abas = new JTabbedPane();
 		abas.addTab("Tarefas", painelTarefas);
-		abas.addTab("Variáveis", new JPanel());
+		abas.addTab("Variáveis", painelVariaveis);
 		abas.addTab("Console", painelConsole);
 		painelPrincipal.add(abas);
 
 		painelTarefas.setTabIndex(0);
+		painelVariaveis.setTabIndex( 1 );
 		painelConsole.setTabIndex(2);
 
-		abas.setEnabledAt(1, false);
 		abas.setEnabledAt(painelConsole.getTabIndex(), false);
 	}
 
