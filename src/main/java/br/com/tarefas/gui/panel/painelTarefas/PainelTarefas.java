@@ -192,12 +192,10 @@ public class PainelTarefas extends JPanel {
 						String cmd = "";
 
 						if(tarefa.getPath().toUpperCase().contains(".JAR") || tarefa.getPath().toUpperCase().contains(".WAR")) {
-							cmd = "java -jar" + tarefa.getParametros();
+							cmd = "java -jar";
 						}
 
-						new CMDUtils().executaCmd(cmd, tarefa.getPath(), painelConsole.criaNovoPainelLogavel(CMDUtils.getNewProcessName(tarefa.getPath())));
-
-
+						new CMDUtils().executaCmd(cmd, tarefa.getPath(), painelConsole.criaNovoPainelLogavel(CMDUtils.getNewProcessName(tarefa.getPath())), tarefa.getParametros());
 					}
 				}catch (Exception ex) {
 					JOptionPane.showMessageDialog(null, "Ocorreu um erro ao executar a(s) tarefa(s)!", "Alerta", JOptionPane.ERROR_MESSAGE);

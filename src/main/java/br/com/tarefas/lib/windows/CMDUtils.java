@@ -76,8 +76,14 @@ public class CMDUtils {
 		System.out.println("Processo finalizado!");
 	}
 
-	public void executaCmd(final String comando, final String path, PainelLogavel painel) throws IOException {
-		Process process = Runtime.getRuntime().exec(comando + " " + path);
+	public void executaCmd(final String comando, final String path, PainelLogavel painel, String parametros) throws IOException {
+		String params = "";
+
+		if(!StringUtils.trim(parametros).isEmpty()) {
+		   params = " " + StringUtils.trim(parametros);
+		}
+
+	   Process process = Runtime.getRuntime().exec(comando + " " + path + params);
 
 		CMDStreamReader reader = new CMDStreamReader(process, process.getInputStream(), painel);
 		Thread thread = new Thread(reader, painel.getProcessName());
