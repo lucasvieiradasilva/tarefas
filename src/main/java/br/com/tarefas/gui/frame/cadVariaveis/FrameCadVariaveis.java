@@ -226,6 +226,7 @@ public class FrameCadVariaveis extends JFrame {
          try {
             BufferedReader br = new BufferedReader(new FileReader(arquivoBean.getPath()));
             FileOutputStream bufferSaida = new FileOutputStream(getPathArquivo(arquivoBean.getPath()));
+
             while(br.ready()){
                montaLinha(bufferSaida, br.readLine());
             }
