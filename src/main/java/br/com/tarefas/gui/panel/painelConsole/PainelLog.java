@@ -23,6 +23,8 @@ public class PainelLog extends JPanel implements PainelLogavel {
 
 	private String processName;
 	private boolean travaScroll = true;
+	@SuppressWarnings("unused")
+   private boolean finalizado = false;
 
 	private JPanel painelAtalhos = new JPanel();
 	private PainelScroll painelScroll = new PainelScroll();
@@ -154,4 +156,10 @@ public class PainelLog extends JPanel implements PainelLogavel {
 	      this.getVerticalScrollBar().removeAdjustmentListener(adjustmentListener);
 	   }
 	}
+
+   @Override
+   public void setFinalizado( boolean finalizado ) {
+      loga("\n**************** TAREFA FINALIZADA! ****************\n");
+      this.finalizado = true;
+   }
 }

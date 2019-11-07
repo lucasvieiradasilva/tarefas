@@ -23,6 +23,9 @@ public class CMDStreamReader implements Runnable {
             	painel.loga(line);
                 line = reader.readLine();
             }
+
+            painel.setFinalizado(true);
+
             reader.close();
         } catch (IOException e) {
         	CMDUtils.mapProcessos.remove(painel.getProcessName());
