@@ -30,6 +30,7 @@ public class FrameCadArquivo extends JFrame {
    private final int[] TAMANHO_JANELA = { 600, 180 };
 
    private JPanel painelPrincipal;
+   private JFrame frameAnterior;
 
    private JPanel painelNorth;
    private JPanel painelCenter;
@@ -46,12 +47,13 @@ public class FrameCadArquivo extends JFrame {
    private JButton btnLoadArquivo = new JButton("Arquivo");
    private JTextField txtPath = new JTextField();
 
-   public FrameCadArquivo() throws Exception {
-      this(new ArquivoBean());
+   public FrameCadArquivo(JFrame frame) throws Exception {
+      this(new ArquivoBean(), frame);
    }
 
-   public FrameCadArquivo(ArquivoBean arquivo) throws Exception {
+   public FrameCadArquivo(ArquivoBean arquivo, JFrame frame) throws Exception {
       this.arquivo = arquivo;
+      this.frameAnterior = frame;
 
       preparaJanela();
       preparaPainelPrincipal();
@@ -147,7 +149,7 @@ public class FrameCadArquivo extends JFrame {
 
             JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 
-            int returnValue = jfc.showOpenDialog(null);
+            int returnValue = jfc.showOpenDialog(FrameCadArquivo.this);
 
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                File selectedFile = jfc.getSelectedFile();
@@ -166,12 +168,12 @@ public class FrameCadArquivo extends JFrame {
             try {
 
                if(StringUtils.trim(txtDescricao.getText()).isEmpty()) {
-                  JOptionPane.showMessageDialog(null, "O arquivo deverá conter uma descrição!", "Alerta", JOptionPane.ERROR_MESSAGE);
+                  JOptionPane.showMessageDialog(FrameCadArquivo.this, "O arquivo deverá conter uma descrição!", "Alerta", JOptionPane.ERROR_MESSAGE);
                   return;
                }
 
                if(StringUtils.trim(txtPath.getText()).isEmpty()) {
-                  JOptionPane.showMessageDialog(null, "O arquivo deverá conter um caminho!", "Alerta", JOptionPane.ERROR_MESSAGE);
+                  JOptionPane.showMessageDialog(FrameCadArquivo.this, "O arquivo deverá conter um caminho!", "Alerta", JOptionPane.ERROR_MESSAGE);
                   return;
                }
 
@@ -215,7 +217,7 @@ public class FrameCadArquivo extends JFrame {
    private void mostraJanela() throws Exception {
       this.pack();
 
-      FrameBounds frameBounds = FrameUtils.getFrameBounds(TAMANHO_JANELA[0], TAMANHO_JANELA[1]);
+      FrameBounds frameBounds = FrameUtils.getFrameBounds(TAMANHO_JANELA[0], TAMANHO_JANELA[1], this.frameAnterior);
       this.setBounds(frameBounds.getPosX(), frameBounds.getPosY(), frameBounds.getWidth(), frameBounds.getHeight());
 
       this.setSize(TAMANHO_JANELA[0], TAMANHO_JANELA[1]);

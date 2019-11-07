@@ -67,8 +67,7 @@ public class VariavelDAO {
          return;
       }
 
-      try {
-         FileOutputStream buffer = new FileOutputStream(getFile());
+      try (FileOutputStream buffer = new FileOutputStream(getFile())){
          buffer.write(xml.getBytes());
          buffer.close();
       } catch (IOException e) {

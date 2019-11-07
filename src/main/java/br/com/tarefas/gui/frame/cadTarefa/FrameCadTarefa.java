@@ -32,6 +32,7 @@ public class FrameCadTarefa extends JFrame {
 	private final int[] TAMANHO_JANELA = { 300, 200 };
 
 	private JPanel painelPrincipal;
+	private JFrame frameAnterior;
 
 	private JPanel painelNorth;
 	private JPanel painelCenter;
@@ -50,12 +51,13 @@ public class FrameCadTarefa extends JFrame {
 	private JButton btnLoadArquivo = new JButton("Arquivo");
 	private JTextField txtPath = new JTextField();
 
-	public FrameCadTarefa() throws Exception {
-		this(new TarefaBean());
+	public FrameCadTarefa(JFrame frameAnterior) throws Exception {
+		this(new TarefaBean(), frameAnterior);
 	}
 
-	public FrameCadTarefa(TarefaBean tarefa) throws Exception {
+	public FrameCadTarefa(TarefaBean tarefa, JFrame frameAnterior) throws Exception {
 		this.tarefa = tarefa;
+		this.frameAnterior = frameAnterior;
 
 		preparaJanela();
 		preparaPainelPrincipal();
@@ -157,7 +159,7 @@ public class FrameCadTarefa extends JFrame {
 
 				JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 
-				int returnValue = jfc.showOpenDialog(null);
+				int returnValue = jfc.showOpenDialog(FrameCadTarefa.this);
 
 				if (returnValue == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = jfc.getSelectedFile();
@@ -176,12 +178,12 @@ public class FrameCadTarefa extends JFrame {
 				try {
 
 					if(StringUtils.trim(txtDescricao.getText()).isEmpty()) {
-						JOptionPane.showMessageDialog(null, "A tarefa deverá conter uma descrição!", "Alerta", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(FrameCadTarefa.this, "A tarefa deverá conter uma descrição!", "Alerta", JOptionPane.ERROR_MESSAGE);
 						return;
 					}
 
 					if(StringUtils.trim(txtPath.getText()).isEmpty()) {
-						JOptionPane.showMessageDialog(null, "A tarefa deverá conter um arquivo!", "Alerta", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(FrameCadTarefa.this, "A tarefa deverá conter um arquivo!", "Alerta", JOptionPane.ERROR_MESSAGE);
 						return;
 					}
 
@@ -226,7 +228,7 @@ public class FrameCadTarefa extends JFrame {
 	private void mostraJanela() throws Exception {
 		this.pack();
 
-		FrameBounds frameBounds = FrameUtils.getFrameBounds(TAMANHO_JANELA[0], TAMANHO_JANELA[1]);
+		FrameBounds frameBounds = FrameUtils.getFrameBounds(TAMANHO_JANELA[0], TAMANHO_JANELA[1], this.frameAnterior);
 		this.setBounds(frameBounds.getPosX(), frameBounds.getPosY(), frameBounds.getWidth(), frameBounds.getHeight());
 
 		this.setSize(TAMANHO_JANELA[0], TAMANHO_JANELA[1]);

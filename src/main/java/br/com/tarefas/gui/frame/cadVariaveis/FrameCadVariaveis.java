@@ -46,12 +46,14 @@ public class FrameCadVariaveis extends JFrame {
    private String fechamento = "}}";
 
    private List<ArquivoBean> arquivos;
+   private JFrame frameAnterior;
 
    private JTable tabela;
    private TableModelVariaveis model;
 
-   public FrameCadVariaveis(List<ArquivoBean> arquivos) throws Exception {
+   public FrameCadVariaveis(List<ArquivoBean> arquivos, JFrame frame) throws Exception {
       this.arquivos = arquivos;
+      this.frameAnterior = frame;
 
       preparaJanela();
       preparaPainelPrincipal();
@@ -125,7 +127,7 @@ public class FrameCadVariaveis extends JFrame {
          public void actionPerformed(ActionEvent e) {
             new VariavelDAO().salvar( model.getVariaveis() );
             reescreveArquivos();
-            JOptionPane.showMessageDialog(null, "Variáveis salvas com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(FrameCadVariaveis.this, "Variáveis salvas com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
             dispose();
          }
       });
@@ -136,7 +138,7 @@ public class FrameCadVariaveis extends JFrame {
    private void mostraJanela() throws Exception {
       this.pack();
 
-      FrameBounds frameBounds = FrameUtils.getFrameBounds(TAMANHO_JANELA[0], TAMANHO_JANELA[1]);
+      FrameBounds frameBounds = FrameUtils.getFrameBounds(TAMANHO_JANELA[0], TAMANHO_JANELA[1], this.frameAnterior);
       this.setBounds(frameBounds.getPosX(), frameBounds.getPosY(), frameBounds.getWidth(), frameBounds.getHeight());
 
       this.setSize(TAMANHO_JANELA[0], TAMANHO_JANELA[1]);

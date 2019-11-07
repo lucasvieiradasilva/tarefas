@@ -24,7 +24,6 @@ import br.com.tarefas.gui.panel.painelArquivos.table.TableModelArquivos;
 public class PainelArquivos extends JPanel {
    private static final long serialVersionUID = 1L;
 
-   @SuppressWarnings("unused")
    private FramePrincipal frame;
 
    private int tabIndex = 0;
@@ -109,7 +108,7 @@ public class PainelArquivos extends JPanel {
          @Override
          public void actionPerformed(ActionEvent e) {
             try {
-               FrameCadArquivo frameCadArquivo = new FrameCadArquivo();
+               FrameCadArquivo frameCadArquivo = new FrameCadArquivo(frame);
                frameCadArquivo.addWindowListener(new java.awt.event.WindowAdapter() {
                    public void windowClosed(java.awt.event.WindowEvent e) {
                      model.update(new ArquivoDAO().getArquivos());
@@ -137,7 +136,7 @@ public class PainelArquivos extends JPanel {
 
                if(arq != null && arq.isSelected()) {
                   if(arquivo != null) {
-                     JOptionPane.showMessageDialog(null, "Somente um arquivo deverá estar selecionado!", "Alerta", JOptionPane.ERROR_MESSAGE);
+                     JOptionPane.showMessageDialog(PainelArquivos.this, "Somente um arquivo deverá estar selecionado!", "Alerta", JOptionPane.ERROR_MESSAGE);
                      return;
                   }
 
@@ -146,12 +145,12 @@ public class PainelArquivos extends JPanel {
             }
 
             if(arquivo == null) {
-               JOptionPane.showMessageDialog(null, "Nenhuma arquivo selecionado!", "Alerta", JOptionPane.ERROR_MESSAGE);
+               JOptionPane.showMessageDialog(PainelArquivos.this, "Nenhuma arquivo selecionado!", "Alerta", JOptionPane.ERROR_MESSAGE);
                return;
             }
 
             try {
-               FrameCadArquivo frameCadArquivo = new FrameCadArquivo(arquivo);
+               FrameCadArquivo frameCadArquivo = new FrameCadArquivo(arquivo, frame);
                frameCadArquivo.addWindowListener(new java.awt.event.WindowAdapter() {
                    public void windowClosed(java.awt.event.WindowEvent e) {
                      model.update(new ArquivoDAO().getArquivos());
@@ -173,7 +172,7 @@ public class PainelArquivos extends JPanel {
          @Override
          public void actionPerformed(ActionEvent e) {
             try{
-               new FrameCadVariaveis(model.getArquivos());
+               new FrameCadVariaveis(model.getArquivos(), frame);
             }
             catch( Exception e1 ){
                e1.printStackTrace();
