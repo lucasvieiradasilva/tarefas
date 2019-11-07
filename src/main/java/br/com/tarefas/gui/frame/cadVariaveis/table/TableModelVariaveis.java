@@ -1,10 +1,11 @@
 package br.com.tarefas.gui.frame.cadVariaveis.table;
 
 import java.util.List;
-import javax.swing.table.AbstractTableModel;
+import javax.swing.JTable;
 import br.com.tarefas.data.variaveis.VariavelBean;
+import br.com.tarefas.gui.table.TableModelDefault;
 
-public class TableModelVariaveis extends AbstractTableModel {
+public class TableModelVariaveis extends TableModelDefault {
    private static final long serialVersionUID = 1L;
 
    private List<VariavelBean> variaveis;
@@ -12,8 +13,9 @@ public class TableModelVariaveis extends AbstractTableModel {
    private String[] colunas = new String[]{EnumVariaveisColunas.ID.getNome(),
                                            EnumVariaveisColunas.VALOR.getNome()};
 
-   public TableModelVariaveis(List<VariavelBean> variaveis) {
-     this.variaveis = variaveis;
+   public TableModelVariaveis(List<VariavelBean> variaveis, JTable table) {
+      super(table);
+      this.variaveis = variaveis;
    }
 
    @Override

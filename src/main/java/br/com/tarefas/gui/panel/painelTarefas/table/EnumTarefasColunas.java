@@ -1,6 +1,8 @@
 package br.com.tarefas.gui.panel.painelTarefas.table;
 
-public enum EnumTarefasColunas {
+import br.com.tarefas.gui.table.EnumTableColumns;
+
+public enum EnumTarefasColunas implements EnumTableColumns {
 	SELECT("", 0),
 	ID("Id", 1),
 	DESCRICAO("Descrição", 2),
@@ -15,10 +17,12 @@ public enum EnumTarefasColunas {
 		this.posicao = posicao;
 	}
 
+	@Override
 	public String getNome() {
 		return this.nome;
 	}
 
+	@Override
 	public int getPosicao() {
 		return this.posicao;
 	}

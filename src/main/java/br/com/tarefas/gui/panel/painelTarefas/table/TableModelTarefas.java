@@ -1,12 +1,11 @@
 package br.com.tarefas.gui.panel.painelTarefas.table;
 
 import java.util.List;
-
-import javax.swing.table.AbstractTableModel;
-
+import javax.swing.JTable;
 import br.com.tarefas.data.tarefa.TarefaBean;
+import br.com.tarefas.gui.table.TableModelDefault;
 
-public class TableModelTarefas extends AbstractTableModel {
+public class TableModelTarefas extends TableModelDefault {
 	private static final long serialVersionUID = 1L;
 
 	private List<TarefaBean> tarefas;
@@ -17,8 +16,9 @@ public class TableModelTarefas extends AbstractTableModel {
 			                                EnumTarefasColunas.PATH.getNome(),
 			                                EnumTarefasColunas.PARAMETROS.getNome()};
 
-    public TableModelTarefas(List<TarefaBean> tarefas) {
-    	this.tarefas = tarefas;
+    public TableModelTarefas(List<TarefaBean> tarefas, JTable table) {
+       super(table);
+       this.tarefas = tarefas;
     }
 
     @Override

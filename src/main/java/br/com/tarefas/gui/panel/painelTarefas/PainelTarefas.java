@@ -5,15 +5,15 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
-
 import br.com.tarefas.data.tarefa.TarefaBean;
 import br.com.tarefas.data.tarefa.TarefaDAO;
 import br.com.tarefas.gui.frame.FramePrincipal;
@@ -63,15 +63,19 @@ public class PainelTarefas extends JPanel {
 		this.tabela.setAlignmentX(0);
 		this.tabela.setAlignmentY(0);
 
-		model = new TableModelTarefas(new TarefaDAO().getTarefas());
+		model = new TableModelTarefas(new TarefaDAO().getTarefas(), this.tabela);
 
 		this.tabela.setModel(this.model);
 
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+
 		TableColumn colunaSelect = this.tabela.getColumn(EnumTarefasColunas.SELECT.getNome());
-		colunaSelect.setMaxWidth(5);
+		colunaSelect.setMaxWidth(20);
 		colunaSelect.setResizable(false);
 
 		TableColumn colunaId = this.tabela.getColumn(EnumTarefasColunas.ID.getNome());
+		colunaId.setCellRenderer(centerRenderer);
 		colunaId.setMaxWidth(70);
 		colunaId.setResizable(false);
 

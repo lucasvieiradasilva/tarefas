@@ -104,12 +104,12 @@ public class FrameCadVariaveis extends JFrame {
       this.tabela.setAlignmentX(0);
       this.tabela.setAlignmentY(0);
 
-      model = new TableModelVariaveis(getVariaveis());
+      this.model = new TableModelVariaveis(getVariaveis(), this.tabela);
 
       this.tabela.setModel(this.model);
 
-      TableColumn colunaSelect = this.tabela.getColumn(EnumVariaveisColunas.ID.getNome());
-      colunaSelect.setPreferredWidth(150);
+      TableColumn colunaId = this.tabela.getColumn(EnumVariaveisColunas.ID.getNome());
+      colunaId.setPreferredWidth(150);
 
       TableColumn colunaDescricao = this.tabela.getColumn(EnumVariaveisColunas.VALOR.getNome());
       colunaDescricao.setPreferredWidth(150);

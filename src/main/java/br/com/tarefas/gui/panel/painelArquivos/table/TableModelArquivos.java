@@ -1,10 +1,11 @@
 package br.com.tarefas.gui.panel.painelArquivos.table;
 
 import java.util.List;
-import javax.swing.table.AbstractTableModel;
+import javax.swing.JTable;
 import br.com.tarefas.data.arquivo.ArquivoBean;
+import br.com.tarefas.gui.table.TableModelDefault;
 
-public class TableModelArquivos extends AbstractTableModel {
+public class TableModelArquivos extends TableModelDefault {
    private static final long serialVersionUID = 1L;
 
    private List<ArquivoBean> arquivos;
@@ -14,8 +15,9 @@ public class TableModelArquivos extends AbstractTableModel {
                                            EnumArquivosColunas.DESCRICAO.getNome(),
                                            EnumArquivosColunas.PATH.getNome()};
 
-   public TableModelArquivos(List<ArquivoBean> arquivos) {
-     this.arquivos = arquivos;
+   public TableModelArquivos(List<ArquivoBean> arquivos, JTable table) {
+      super(table);
+      this.arquivos = arquivos;
    }
 
    @Override
