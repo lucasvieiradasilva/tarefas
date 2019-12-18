@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -64,8 +66,16 @@ public class PainelTarefas extends JPanel {
 		this.tabela.setAlignmentY(0);
 
 		model = new TableModelTarefas(new TarefaDAO().getTarefas(), this.tabela);
-
 		this.tabela.setModel(this.model);
+
+		this.tabela.getTableHeader().addMouseListener( new MouseAdapter() {
+         @Override
+         public void mouseClicked( MouseEvent e ) {
+            if( EnumTarefasColunas.SELECT.getPosicao() == tabela.columnAtPoint( e.getPoint() )) {
+               marcarDesmarcarTodos();
+            };
+         }
+      });
 
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
@@ -107,6 +117,7 @@ public class PainelTarefas extends JPanel {
 
 		acaoBotaoNovaTarefa();
 		acaoBotaoEditar();
+		acaoBotaoExcluir();
 		acaoBotaoExecutar();
 		acaoBotaoPararTodos();
 	}
@@ -173,6 +184,22 @@ public class PainelTarefas extends JPanel {
 		});
 
 		painelSouth.add(botaoEditarTarefa);
+	}
+
+	private void acaoBotaoExcluir() {
+	   JButton botaoExcluir = new JButton("Excluir");
+
+	   botaoExcluir.addActionListener( new ActionListener(){
+
+         @Override
+         public void actionPerformed( ActionEvent e ) {
+            if( JOptionPane.showConfirmDialog( PainelTarefas.this, "", "Atenção!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE ) == JOptionPane.YES_OPTION ) {
+               System.out.println( "Testeeeee" );
+            }
+         }
+      } );
+
+	   painelSouth.add(botaoExcluir);
 	}
 
 	private void acaoBotaoExecutar() {
@@ -252,4 +279,22 @@ public class PainelTarefas extends JPanel {
 	public void setTabIndex(int tabIndex) {
 		this.tabIndex = tabIndex;
 	}
+
+	private boolean isTodosItensSelecionados() {
+      for(int i = 0; i < tabela.getRowCount(); i++  ) {
+         TarefaBean tarefa = model.getTarefa( i );
+
+         if( tarefa != null && !tarefa.isSelected() ) {
+            return false;
+         }
+      }
+      return true;
+   }
+
+   private void marcarDesmarcarTodos() {
+      boolean marcar = !isTodosItensSelecionados();
+      for(int i = 0; i < tabela.getRowCount(); i++  ) {
+         tabela.setValueAt( marcar, i, EnumTarefasColunas.SELECT.getPosicao() );
+      }
+   }
 }

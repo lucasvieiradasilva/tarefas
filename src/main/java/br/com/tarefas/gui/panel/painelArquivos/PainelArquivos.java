@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -77,8 +79,17 @@ public class PainelArquivos extends JPanel {
       this.tabela.setAlignmentY(0);
 
       model = new TableModelArquivos(new ArquivoDAO().getArquivos(), this.tabela);
-
       this.tabela.setModel(this.model);
+
+
+      this.tabela.getTableHeader().addMouseListener( new MouseAdapter() {
+         @Override
+         public void mouseClicked( MouseEvent e ) {
+            if( EnumArquivosColunas.SELECT.getPosicao() == tabela.columnAtPoint( e.getPoint() )) {
+               marcarDesmarcarTodos();
+            }
+         }
+      });
 
       DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
       centerRenderer.setHorizontalAlignment( JLabel.CENTER );
@@ -189,5 +200,23 @@ public class PainelArquivos extends JPanel {
 
    public void setTabIndex( int tabIndex ) {
       this.tabIndex = tabIndex;
+   }
+
+   private boolean isTodosItensSelecionados() {
+      for(int i = 0; i < tabela.getRowCount(); i++  ) {
+         ArquivoBean arq = model.getArquivo(i);
+
+         if( arq != null && !arq.isSelected() ) {
+            return false;
+         }
+      }
+      return true;
+   }
+
+   private void marcarDesmarcarTodos() {
+      boolean marcar = !isTodosItensSelecionados();
+      for(int i = 0; i < tabela.getRowCount(); i++  ) {
+         tabela.setValueAt( marcar, i, EnumArquivosColunas.SELECT.getPosicao() );
+      }
    }
 }
